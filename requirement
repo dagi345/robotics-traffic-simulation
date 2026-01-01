@@ -1,0 +1,44 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{array}
+\usepackage{setspace}
+
+\setstretch{1.2}
+
+\begin{document}
+
+\begin{center}
+    \Large \textbf{Project Proposal}
+\end{center}
+
+\vspace{0.5cm}
+
+\section*{Project Title}
+Smart Traffic Light System Using Vehicle and Pedestrian Density for Ethiopian Intersections
+
+
+
+
+\section*{Problem Statement}
+
+In Ethiopia, most traffic light systems operate based on fixed time intervals and do not adapt to real-time traffic conditions. This results in heavy congestion on busy roads, unnecessary waiting times on lightly used roads, and unsafe pedestrian crossings. Pedestrians often cross roads without proper signals due to long delays, increasing the risk of traffic accidents.
+
+The absence of intelligent traffic control systems that consider vehicle and pedestrian density negatively impacts road safety, traffic efficiency, and fuel consumption, especially near schools, markets, and busy urban intersections. Addressing this issue is essential to improving transportation systems in Ethiopian cities.
+
+\section*{Proposed Solution}
+
+This project proposes the simulation of a smart traffic light system that dynamically controls traffic signals based on real-time vehicle and pedestrian density.
+
+Using ROS~2 and Gazebo, a road intersection will be simulated where vehicles and pedestrians are detected and counted. A central traffic controller node will analyze this data and determine which traffic direction receives a green signal and for how long. Pedestrian crossing signals will be activated when pedestrian density is high and traffic conditions allow safe crossing.
+
+Unlike traditional fixed-time traffic lights, the proposed system adapts signal timing dynamically, improving traffic flow and pedestrian safety. The system will be visualized and monitored using RViz.
+
+
+\section*{Expected Outcomes and Impact}
+
+The expected outcome of this project is a fully functional ROS-based simulation of an adaptive traffic light system that responds to real-time vehicle and pedestrian conditions. The simulation will demonstrate improved traffic flow, reduced congestion, and enhanced pedestrian safety compared to traditional fixed-time traffic light systems.
+
+This project demonstrates how intelligent traffic control solutions can be applied to Ethiopian urban environments and provides a foundation for future real-world smart transportation systems.
+
+\end{document}

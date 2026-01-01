@@ -1,0 +1,863 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="intersection_world">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Detailed Road Intersection -->
+    <model name="intersection_base">
+      <static>true</static>
+      <pose>0 0 0.01 0 0 0</pose>
+      <link name="link">
+        <visual name="road_ns">
+          <geometry><box><size>12 100 0.01</size></box></geometry>
+          <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.2 0.2 0.2 1</diffuse></material>
+        </visual>
+        <visual name="road_ew">
+          <pose>0 0 0 0 0 1.5707</pose>
+          <geometry><box><size>12 100 0.01</size></box></geometry>
+          <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.2 0.2 0.2 1</diffuse></material>
+        </visual>
+        <!-- Center marking -->
+        <visual name="center_marking">
+            <geometry><box><size>12 12 0.011</size></box></geometry>
+            <material><ambient>0.3 0.3 0.3 1</ambient><diffuse>0.3 0.3 0.3 1</diffuse></material>
+        </visual>
+
+        <!-- North Crosswalk (Zebra Stripes) -->
+        <visual name="cw_n_1"><pose>2 10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_n_2"><pose>0 10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_n_3"><pose>-2 10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        
+        <!-- South Crosswalk -->
+        <visual name="cw_s_1"><pose>2 -10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_s_2"><pose>0 -10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_s_3"><pose>-2 -10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+
+        <!-- East Crosswalk -->
+        <visual name="cw_e_1"><pose>10 2 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_e_2"><pose>10 0 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_e_3"><pose>10 -2 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+
+        <!-- West Crosswalk -->
+        <visual name="cw_w_1"><pose>-10 2 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_w_2"><pose>-10 0 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_w_3"><pose>-10 -2 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+
+        <!-- Stop Lines -->
+        <visual name="stop_n"><pose>0 13 0.013 0 0 0</pose><geometry><box><size>12 0.5 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="stop_s"><pose>0 -13 0.013 0 0 0</pose><geometry><box><size>12 0.5 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="stop_e"><pose>13 0 0.013 0 0 1.5707</pose><geometry><box><size>12 0.5 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="stop_w"><pose>-13 0 0.013 0 0 1.5707</pose><geometry><box><size>12 0.5 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- Detection Camera Overlooking Intersection -->
+    <model name="intersection_camera">
+      <static>true</static>
+      <pose>0 0 15 0 1.5707 0</pose> <!-- High up looking down -->
+      <link name="link">
+        <sensor name="camera" type="camera">
+          <camera>
+            <horizontal_fov>1.047</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+          <always_on>1</always_on>
+          <update_rate>10</update_rate>
+          <visualize>true</visualize>
+          <topic>camera</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- High-Fidelity Local Traffic Lights (Positioned to face incoming lanes) -->
+    <!-- Facing North (Southbound entry) -->
+    <include>
+      <uri>model://detailed_traffic_light</uri>
+      <name>tl_north</name>
+      <pose>8 15 0 0 0 3.1415</pose> 
+    </include>
+    
+    <!-- Facing South (Northbound entry) -->
+    <include>
+      <uri>model://detailed_traffic_light</uri>
+      <name>tl_south</name>
+      <pose>-8 -15 0 0 0 0</pose>
+    </include>
+
+    <!-- Facing East (Westbound entry) -->
+    <include>
+      <uri>model://detailed_traffic_light</uri>
+      <name>tl_east</name>
+      <pose>15 -8 0 0 0 1.5707</pose>
+    </include>
+
+    <!-- Facing West (Eastbound entry) -->
+    <include>
+      <uri>model://detailed_traffic_light</uri>
+      <name>tl_west</name>
+      <pose>-15 8 0 0 0 -1.5707</pose>
+    </include>
+
+    <!-- Realistic Vehicles: 4 Roads, 2 Lanes per Road, 4 Cars per Road = 16 Cars -->
+    <!-- Using Prius Hybrid model from Gazebo Fuel with velocity control plugin -->
+    <!-- All cars rotated 180 degrees for proper alignment -->
+    
+    <!-- SOUTHBOUND (Coming from North, heading south - opposite of northbound) -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s1</name>
+      <pose>-2 30 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s2</name>
+      <pose>-2 25 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s3</name>
+      <pose>-5 35 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s4</name>
+      <pose>-5 30 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+
+    <!-- NORTHBOUND (Coming from South, heading north) -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_n1</name>
+      <pose>2 -30 0.01 0 0 3.1415</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_n2</name>
+      <pose>2 -25 0.01 0 0 3.1415</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_n3</name>
+      <pose>5 -35 0.01 0 0 3.1415</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_n4</name>
+      <pose>5 -30 0.01 0 0 3.1415</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+
+    <!-- WESTBOUND (Coming from East, heading west) -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w1</name>
+      <pose>30 2 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w2</name>
+      <pose>25 2 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w3</name>
+      <pose>35 5 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w4</name>
+      <pose>30 5 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+
+    <!-- EASTBOUND (Coming from West, heading east) -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_e1</name>
+      <pose>-30 -2 0.01 0 0 1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_e2</name>
+      <pose>-25 -2 0.01 0 0 1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_e3</name>
+      <pose>-30 -5 0.01 0 0 1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_e4</name>
+      <pose>-25 -5 0.01 0 0 1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+
+    <!-- Logical cameras to detect pedestrians waiting at crosswalks -->
+    <!-- Each sensor covers both sides of a crosswalk waiting area -->
+    
+    <!-- North crosswalk pedestrian sensor (covers y=7 to y=14, x=-6 to x=6) -->
+    <model name="sensor_pedestrian_north">
+      <static>true</static>
+      <pose>0 10.5 8 0 1.5707 0</pose> <!-- Above north crosswalk, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>12</far>
+            <horizontal_fov>1.2</horizontal_fov>
+            <aspect_ratio>1.5</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/pedestrian_north</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- South crosswalk pedestrian sensor (covers y=-14 to y=-7, x=-6 to x=6) -->
+    <model name="sensor_pedestrian_south">
+      <static>true</static>
+      <pose>0 -10.5 8 0 1.5707 0</pose> <!-- Above south crosswalk, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>12</far>
+            <horizontal_fov>1.2</horizontal_fov>
+            <aspect_ratio>1.5</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/pedestrian_south</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- East crosswalk pedestrian sensor (covers x=7 to x=14, y=-6 to y=6) -->
+    <model name="sensor_pedestrian_east">
+      <static>true</static>
+      <pose>10.5 0 8 0 1.5707 0</pose> <!-- Above east crosswalk, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>12</far>
+            <horizontal_fov>1.2</horizontal_fov>
+            <aspect_ratio>1.5</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/pedestrian_east</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- West crosswalk pedestrian sensor (covers x=-14 to x=-7, y=-6 to y=6) -->
+    <model name="sensor_pedestrian_west">
+      <static>true</static>
+      <pose>-10.5 0 8 0 1.5707 0</pose> <!-- Above west crosswalk, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>12</far>
+            <horizontal_fov>1.2</horizontal_fov>
+            <aspect_ratio>1.5</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/pedestrian_west</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- LANE DETECTION SENSORS (Logical Cameras) -->
+    <model name="sensor_north_road">
+      <static>true</static>
+      <pose>0 20 10 0 1.5707 0</pose> <!-- North road, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>0.1</near><far>50</far>
+            <horizontal_fov>2.0</horizontal_fov>
+            <aspect_ratio>2</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <always_on>true</always_on>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="sensor_south_road">
+      <static>true</static>
+      <pose>0 -20 10 0 1.5707 0</pose> <!-- South road, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>0.1</near><far>50</far>
+            <horizontal_fov>2.0</horizontal_fov>
+            <aspect_ratio>2</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <always_on>true</always_on>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="sensor_east_road">
+      <static>true</static>
+      <pose>20 0 10 0 1.5707 0</pose> <!-- East road, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>0.1</near><far>50</far>
+            <horizontal_fov>2.0</horizontal_fov>
+            <aspect_ratio>2</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <always_on>true</always_on>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="sensor_west_road">
+      <static>true</static>
+      <pose>-20 0 10 0 1.5707 0</pose> <!-- West road, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>0.1</near><far>50</far>
+            <horizontal_fov>2.0</horizontal_fov>
+            <aspect_ratio>2</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <always_on>true</always_on>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- INTERSECTION ZONE SENSOR -->
+    <!-- Monitors vehicles in the intersection zone (-13 to +13 in X and Y) -->
+    <!-- Used to prevent phase changes when vehicles are crossing -->
+    <model name="sensor_intersection_zone">
+      <static>true</static>
+      <pose>0 0 20 0 1.5707 0</pose> <!-- Centered above intersection, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>25</far> <!-- Covers the full intersection zone -->
+            <horizontal_fov>1.2</horizontal_fov> <!-- Wide enough to cover 26m x 26m zone -->
+            <aspect_ratio>1</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/intersection_zone</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="building_nw">
+      <static>true</static>
+      <pose>-30 30 10 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>20 20 20</size></box></geometry>
+          <material><ambient>0.6 0.5 0.4 1</ambient><diffuse>0.6 0.5 0.4 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="building_ne">
+      <static>true</static>
+      <pose>30 30 15 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>20 20 30</size></box></geometry>
+          <material><ambient>0.4 0.5 0.6 1</ambient><diffuse>0.4 0.5 0.6 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="building_sw">
+      <static>true</static>
+      <pose>-30 -30 12 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>20 20 24</size></box></geometry>
+          <material><ambient>0.5 0.6 0.5 1</ambient><diffuse>0.5 0.6 0.5 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="building_se">
+      <static>true</static>
+      <pose>30 -30 8 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>20 20 16</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+
+
+<!-- ========================================== -->
+<!-- CORRECTED PEDESTRIAN POSITIONS & ORIENTATIONS -->
+<!-- ========================================== -->
+<!-- Total: 20 pedestrians (5 per crosswalk) -->
+<!-- ✅ Positioned on SIDE of road (perpendicular to vehicle flow) -->
+<!-- ✅ Facing ACROSS road (perpendicular to vehicle direction) -->
+<!-- ✅ Same spacing, count, and formation as before -->
+<!-- ========================================== -->
+
+    <include>
+      <name>pedestrian_north_1</name>
+      <pose>-7.000 11.000 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_1/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_1/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_north_2</name>
+      <pose>-7.000 12.000 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_2/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_2/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_north_3</name>
+      <pose>-7.600 11.000 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_3/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_3/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_north_4</name>
+      <pose>-7.600 12.000 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_4/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_4/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_north_5</name>
+      <pose>-8.200 11.500 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_5/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_5/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_1</name>
+      <pose>7.000 -11.000 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_1/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_1/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_2</name>
+      <pose>7.000 -12.000 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_2/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_2/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_3</name>
+      <pose>7.600 -11.000 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_3/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_3/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_4</name>
+      <pose>7.600 -12.000 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_4/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_4/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_5</name>
+      <pose>8.200 -11.500 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_5/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_5/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_1</name>
+      <pose>11.000 7.000 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_1/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_1/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_2</name>
+      <pose>12.000 7.000 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_2/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_2/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_3</name>
+      <pose>11.000 7.600 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_3/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_3/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_4</name>
+      <pose>12.000 7.600 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_4/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_4/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_5</name>
+      <pose>11.500 8.200 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_5/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_5/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_1</name>
+      <pose>-11.000 -7.000 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_1/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_1/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_2</name>
+      <pose>-12.000 -7.000 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_2/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_2/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_3</name>
+      <pose>-11.000 -7.600 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_3/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_3/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_4</name>
+      <pose>-12.000 -7.600 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_4/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_4/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_5</name>
+      <pose>-11.500 -8.200 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_5/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_5/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+  </world>
+</sdf>

@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="simple_car">
+    <link name="chassis">
+      <pose>0 0 0.3 0 0 0</pose>
+      
+      <!-- Main body -->
+      <visual name="body">
+        <geometry>
+          <box><size>4.5 2.0 1.2</size></box>
+        </geometry>
+        <material>
+          <ambient>0.2 0.4 0.8 1</ambient>
+          <diffuse>0.3 0.5 0.9 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="body_collision">
+        <geometry>
+          <box><size>4.5 2.0 1.2</size></box>
+        </geometry>
+      </collision>
+      
+      <!-- Cabin -->
+      <visual name="cabin">
+        <pose>-0.5 0 0.8 0 0 0</pose>
+        <geometry>
+          <box><size>2.5 1.8 0.8</size></box>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 0.8</ambient>
+          <diffuse>0.2 0.2 0.2 0.8</diffuse>
+        </material>
+      </visual>
+      
+      <!-- Wheels -->
+      <visual name="wheel_fl">
+        <pose>1.5 1.0 -0.1 1.5707 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.35</radius><length>0.25</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+        </material>
+      </visual>
+      
+      <visual name="wheel_fr">
+        <pose>1.5 -1.0 -0.1 1.5707 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.35</radius><length>0.25</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+        </material>
+      </visual>
+      
+      <visual name="wheel_rl">
+        <pose>-1.5 1.0 -0.1 1.5707 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.35</radius><length>0.25</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+        </material>
+      </visual>
+      
+      <visual name="wheel_rr">
+        <pose>-1.5 -1.0 -0.1 1.5707 0 0</pose>
+        <geometry>
+          <cylinder><radius>0.35</radius><length>0.25</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+        </material>
+      </visual>
+      
+      <inertial>
+        <mass>1500</mass>
+        <inertia>
+          <ixx>500</ixx>
+          <iyy>1000</iyy>
+          <izz>500</izz>
+        </inertia>
+      </inertial>
+    </link>
+    
+    <!-- Velocity control plugin -->
+    <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+      <initial_linear>0 0 0</initial_linear>
+      <initial_angular>0 0 0</initial_angular>
+    </plugin>
+  </model>
+</sdf>

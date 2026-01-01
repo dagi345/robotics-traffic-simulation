@@ -1,0 +1,416 @@
+
+
+# SMART TRAFFIC LIGHT SYSTEM
+
+## ROS 2 + Gazebo
+
+### Cross Intersection (Vehicle + Pedestrian Density)
+
+---
+
+## 1. SYSTEM OVERVIEW (High-Level Architecture)
+
+### Components
+
+The system consists of **five logical layers**:
+
+1. **Environment Layer (Gazebo)**
+2. **Sensing Layer**
+3. **Traffic State Estimation Layer**
+4. **Decision & Control Layer**
+5. **Actuation & Visualization Layer**
+
+Each layer communicates via **ROS 2 topics and services**.
+
+---
+
+## 2. INTERSECTION MODEL (ASSUMED GEOMETRY)
+
+The intersection is a **4-way cross intersection** with:
+
+* **Road Approaches**
+
+  * North
+  * South
+  * East
+  * West
+
+* **Movements**
+
+  * Straight only (no left/right turns for simplicity)
+  * North–South are non-conflicting
+  * East–West are non-conflicting
+
+* **Pedestrian Crossings**
+
+  * North crosswalk
+  * South crosswalk
+  * East crosswalk
+  * West crosswalk
+
+---
+
+## 3. SENSOR DESIGN & RULES
+
+### 3.1 Vehicle Detection Sensors
+
+Each road approach has **one vehicle density sensor**.
+
+#### Sensor Placement
+
+* Positioned **before the stop line**
+* Covers only its own lane
+* Does NOT overlap intersection center
+
+#### Sensor Type (Simulation)
+
+* Logical sensor (Gazebo contact / bounding box / ray sensor)
+* Counts vehicles within detection zone
+
+#### ROS Topics
+
+```
+/traffic/sensor/vehicle/north   (std_msgs/Int32)
+/traffic/sensor/vehicle/south
+/traffic/sensor/vehicle/east
+/traffic/sensor/vehicle/west
+```
+
+#### Output Meaning
+
+* Value = number of vehicles currently queued or approaching
+* Updated at fixed frequency (e.g., 5–10 Hz)
+
+#### Rules
+
+* Vehicles inside the intersection **must not be counted**
+* Only stopped or approaching vehicles count toward demand
+* Sensor resets count every update (no accumulation)
+
+---
+
+### 3.2 Pedestrian Detection Sensors
+
+Each crosswalk has **one pedestrian density sensor**.
+
+#### Sensor Placement
+
+* Covers waiting area near curb
+* Does NOT extend into road
+
+#### ROS Topics
+
+```
+/traffic/sensor/pedestrian/north
+/traffic/sensor/pedestrian/south
+/traffic/sensor/pedestrian/east
+/traffic/sensor/pedestrian/west
+```
+
+#### Output Meaning
+
+* Number of pedestrians waiting to cross
+* Updated continuously
+
+#### Rules
+
+* Pedestrians already crossing are NOT counted
+* Pedestrian requests are treated as **binary + weighted**
+
+  * Presence matters more than exact count
+
+---
+
+## 4. SIGNAL GROUPING (STANDARD PRACTICE)
+
+Traffic engineers group signals into **phases**.
+
+### Phase Definitions
+
+#### Phase A — North–South Vehicle Phase
+
+* NS vehicle lights: GREEN
+* EW vehicle lights: RED
+* NS pedestrian crossings: DON’T WALK
+* EW pedestrian crossings: WALK (if requested)
+
+#### Phase B — East–West Vehicle Phase
+
+* EW vehicle lights: GREEN
+* NS vehicle lights: RED
+* EW pedestrian crossings: DON’T WALK
+* NS pedestrian crossings: WALK (if requested)
+
+⚠️ **No pedestrian crosses in the same direction as moving vehicles**
+
+---
+
+## 5. TRAFFIC LIGHT STATES (MANDATORY ORDER)
+
+Each phase MUST follow this exact sequence:
+
+```
+GREEN → YELLOW → ALL_RED → next phase GREEN
+```
+
+### Fixed Timing Rules (Standards-Based)
+
+| State   | Duration Rule            |
+| ------- | ------------------------ |
+| GREEN   | Adaptive (density-based) |
+| YELLOW  | Fixed (3 seconds)        |
+| ALL_RED | Fixed (1–2 seconds)      |
+
+These values are derived from MUTCD safety rules.
+
+---
+
+## 6. CENTRAL CONTROLLER NODE
+
+### Node Name
+
+```
+traffic_controller_node
+```
+
+### Responsibilities
+
+* Subscribe to all sensor topics
+* Decide which phase gets green
+* Compute green duration
+* Manage state transitions
+* Publish traffic light commands
+
+---
+
+## 7. DEMAND CALCULATION LOGIC
+
+This is where **traffic engineering theory** applies.
+
+### 7.1 Aggregate Demand Per Phase
+
+Group roads by phase:
+
+```
+NS_vehicle_demand = north_vehicles + south_vehicles
+EW_vehicle_demand = east_vehicles + west_vehicles
+
+NS_pedestrian_demand = north_peds + south_peds
+EW_pedestrian_demand = east_peds + west_peds
+```
+
+---
+
+### 7.2 Weighted Demand Formula
+
+Pedestrians are safety-critical → higher weight.
+
+```
+NS_total_demand =
+    NS_vehicle_demand
+  + α * NS_pedestrian_demand
+
+EW_total_demand =
+    EW_vehicle_demand
+  + α * EW_pedestrian_demand
+```
+
+Where:
+
+* α ∈ [2, 5] (pedestrian priority factor)
+
+---
+
+## 8. PHASE SELECTION RULES
+
+### Rule 1 — No Starvation
+
+* Each phase must get green at least once within a maximum time window
+
+### Rule 2 — Demand-Based Priority
+
+* Phase with higher total demand gets green next
+
+### Rule 3 — Pedestrian Override
+
+* If pedestrian demand exceeds threshold and it’s safe, serve it within the next cycle
+
+---
+
+## 9. GREEN TIME CALCULATION (ADAPTIVE)
+
+Based on **Webster-style logic (simplified)**.
+
+### Parameters
+
+```
+BASE_GREEN = 10 seconds
+MAX_GREEN  = 60 seconds
+k_vehicle  = 1.0 seconds per vehicle
+k_ped      = 2.0 seconds per pedestrian
+```
+
+### Formula
+
+```
+green_time =
+  BASE_GREEN
++ k_vehicle * vehicle_demand
++ k_ped * pedestrian_demand
+
+green_time = clamp(green_time, BASE_GREEN, MAX_GREEN)
+```
+
+---
+
+## 10. PEDESTRIAN SIGNAL LOGIC
+
+### Pedestrian Crossing Rules
+
+Pedestrians may cross ONLY when:
+
+* Conflicting vehicle direction is RED
+* Pedestrian signal is WALK
+
+---
+
+### Pedestrian Timing Calculation
+
+```
+crossing_time =
+  crosswalk_length / walking_speed
+```
+
+Standard walking speed:
+
+```
+walking_speed = 1.2 m/s
+```
+
+Final pedestrian green time:
+
+```
+ped_green_time =
+  max(crossing_time, MIN_WALK_TIME)
+```
+
+Where:
+
+```
+MIN_WALK_TIME = 7 seconds
+```
+
+---
+
+## 11. STATE MACHINE DESIGN (VERY IMPORTANT)
+
+The controller must be implemented as a **finite state machine**.
+
+### States
+
+```
+STATE_NS_GREEN
+STATE_NS_YELLOW
+STATE_ALL_RED_1
+STATE_EW_GREEN
+STATE_EW_YELLOW
+STATE_ALL_RED_2
+```
+
+### Transitions
+
+```
+NS_GREEN → NS_YELLOW → ALL_RED_1 → EW_GREEN
+EW_GREEN → EW_YELLOW → ALL_RED_2 → NS_GREEN
+```
+
+Transitions occur based on:
+
+* Timers
+* Computed green duration
+* Safety constraints
+
+---
+
+## 12. TRAFFIC LIGHT COMMAND INTERFACE
+
+### ROS Topics (Example)
+
+```
+/traffic/light/north
+/traffic/light/south
+/traffic/light/east
+/traffic/light/west
+```
+
+Message type:
+
+```
+std_msgs/String
+```
+
+Payload:
+
+```
+"RED" | "YELLOW" | "GREEN"
+```
+
+---
+
+## 13. SAFETY CONSTRAINTS (NON-NEGOTIABLE)
+
+These rules MUST NEVER be violated:
+
+1. ❌ No conflicting green signals
+2. ❌ No pedestrian WALK during conflicting vehicle GREEN
+3. ✅ Always include ALL-RED between phases
+4. ✅ Yellow must precede red
+5. ✅ Intersection must be empty before next green
+
+---
+
+## 14. FAILURE & EDGE CASE HANDLING
+
+### No Traffic Anywhere
+
+* Default to cyclic operation with minimum green
+
+### Sensor Failure
+
+* Assume zero demand
+* Fall back to fixed-time cycle
+
+### High Pedestrian Density (Schools / Markets)
+
+* Pedestrian override activates
+* Shorter vehicle greens allowed
+
+---
+
+## 15. ROS EXECUTION FLOW (SUMMARY)
+
+1. Sensors publish counts
+2. Controller computes demand
+3. Controller selects phase
+4. Controller computes green time
+5. State machine executes transitions
+6. Traffic lights update in Gazebo
+7. RViz visualizes state
+
+---
+
+## 16. HOW THIS MAPS TO YOUR GAZEBO SCENE
+
+From your image:
+
+* `sensor_north_road`, `sensor_south_road`, etc. → vehicle sensors
+* `sensor_pedestrian_*` → pedestrian sensors
+* Intersection center → protected ALL-RED zone
+* Traffic light models → subscribed to controller topics
+
+---
+
+## Final Note (Important)
+
+What you are building is **a simplified adaptive signal controller**, not a toy system.
+Everything above is **academically valid, industry-aligned, and defensible** in a robotics or ITS project.

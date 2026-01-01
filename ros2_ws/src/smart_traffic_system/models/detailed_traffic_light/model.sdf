@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="detailed_traffic_light">
+    <static>true</static>
+    
+    <!-- Vertical Pole -->
+    <link name="pole">
+      <pose>0 0 3 0 0 0</pose>
+      <visual name="pole_visual">
+        <geometry><cylinder><radius>0.15</radius><length>6.0</length></cylinder></geometry>
+        <material>
+          <ambient>0.2 0.2 0.2 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
+        </material>
+      </visual>
+      <collision name="pole_collision">
+        <geometry><cylinder><radius>0.15</radius><length>6.0</length></cylinder></geometry>
+      </collision>
+    </link>
+
+    <!-- Horizontal Arm -->
+    <link name="arm">
+      <pose>2.0 0 5.8 0 1.5707 0</pose>
+      <visual name="arm_visual">
+        <geometry><cylinder><radius>0.1</radius><length>4.0</length></cylinder></geometry>
+        <material>
+          <ambient>0.2 0.2 0.2 1</ambient>
+          <diffuse>0.2 0.2 0.2 1</diffuse>
+        </material>
+      </visual>
+    </link>
+
+    <!-- Light Housing (Rotated 90 degrees to face traffic) -->
+    <link name="housing">
+      <pose>4.0 0 5.4 0 0 1.5708</pose>
+      <visual name="housing_visual">
+        <geometry><box><size>0.6 0.6 1.8</size></box></geometry>
+        <material>
+          <ambient>0.05 0.05 0.05 1</ambient>
+          <diffuse>0.05 0.05 0.05 1</diffuse>
+        </material>
+      </visual>
+      
+      <!-- Red Light Visual -->
+      <visual name="red_light">
+        <pose>0.31 0 0.6 0 1.5707 0</pose>
+        <geometry><cylinder><radius>0.2</radius><length>0.05</length></cylinder></geometry>
+        <material>
+          <ambient>1 0 0 1</ambient>
+          <diffuse>1 0 0 1</diffuse>
+          <emissive>1 0 0 1</emissive>
+        </material>
+      </visual>
+      <light name="red_lamp" type="point">
+        <pose>0.4 0 0.6 0 0 0</pose>
+        <attenuation>
+          <range>5</range>
+          <linear>0.05</linear>
+        </attenuation>
+        <diffuse>1 0 0 1</diffuse>
+        <specular>1 0 0 1</specular>
+        <intensity>0</intensity>
+      </light>
+      
+      <!-- Yellow Light Visual -->
+      <visual name="yellow_light">
+        <pose>0.31 0 0 0 1.5707 0</pose>
+        <geometry><cylinder><radius>0.2</radius><length>0.05</length></cylinder></geometry>
+        <material>
+          <ambient>1 1 0 1</ambient>
+          <diffuse>1 1 0 1</diffuse>
+          <emissive>1 1 0 1</emissive>
+        </material>
+      </visual>
+      <light name="yellow_lamp" type="point">
+        <pose>0.4 0 0 0 0 0</pose>
+        <attenuation>
+          <range>5</range>
+          <linear>0.05</linear>
+        </attenuation>
+        <diffuse>1 1 0 1</diffuse>
+        <specular>1 1 0 1</specular>
+        <intensity>0</intensity>
+      </light>
+      
+      <!-- Green Light Visual -->
+      <visual name="green_light">
+        <pose>0.31 0 -0.6 0 1.5707 0</pose>
+        <geometry><cylinder><radius>0.2</radius><length>0.05</length></cylinder></geometry>
+        <material>
+          <ambient>0 1 0 1</ambient>
+          <diffuse>0 1 0 1</diffuse>
+          <emissive>0 1 0 1</emissive>
+        </material>
+      </visual>
+      <light name="green_lamp" type="point">
+        <pose>0.4 0 -0.6 0 0 0</pose>
+        <attenuation>
+          <range>5</range>
+          <linear>0.05</linear>
+        </attenuation>
+        <diffuse>0 1 0 1</diffuse>
+        <specular>0 1 0 1</specular>
+        <intensity>1</intensity>
+      </light>
+    </link>
+  </model>
+</sdf>

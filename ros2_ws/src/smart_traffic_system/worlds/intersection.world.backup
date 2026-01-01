@@ -1,0 +1,617 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="intersection_world">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Detailed Road Intersection -->
+    <model name="intersection_base">
+      <static>true</static>
+      <pose>0 0 0.01 0 0 0</pose>
+      <link name="link">
+        <visual name="road_ns">
+          <geometry><box><size>12 100 0.01</size></box></geometry>
+          <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.2 0.2 0.2 1</diffuse></material>
+        </visual>
+        <visual name="road_ew">
+          <pose>0 0 0 0 0 1.5707</pose>
+          <geometry><box><size>12 100 0.01</size></box></geometry>
+          <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.2 0.2 0.2 1</diffuse></material>
+        </visual>
+        <!-- Center marking -->
+        <visual name="center_marking">
+            <geometry><box><size>12 12 0.011</size></box></geometry>
+            <material><ambient>0.3 0.3 0.3 1</ambient><diffuse>0.3 0.3 0.3 1</diffuse></material>
+        </visual>
+
+        <!-- North Crosswalk (Zebra Stripes) -->
+        <visual name="cw_n_1"><pose>2 10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_n_2"><pose>0 10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_n_3"><pose>-2 10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        
+        <!-- South Crosswalk -->
+        <visual name="cw_s_1"><pose>2 -10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_s_2"><pose>0 -10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_s_3"><pose>-2 -10 0.012 0 0 0</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+
+        <!-- East Crosswalk -->
+        <visual name="cw_e_1"><pose>10 2 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_e_2"><pose>10 0 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_e_3"><pose>10 -2 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+
+        <!-- West Crosswalk -->
+        <visual name="cw_w_1"><pose>-10 2 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_w_2"><pose>-10 0 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="cw_w_3"><pose>-10 -2 0.012 0 0 1.5707</pose><geometry><box><size>1.5 6 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+
+        <!-- Stop Lines -->
+        <visual name="stop_n"><pose>0 13 0.013 0 0 0</pose><geometry><box><size>12 0.5 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="stop_s"><pose>0 -13 0.013 0 0 0</pose><geometry><box><size>12 0.5 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="stop_e"><pose>13 0 0.013 0 0 1.5707</pose><geometry><box><size>12 0.5 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+        <visual name="stop_w"><pose>-13 0 0.013 0 0 1.5707</pose><geometry><box><size>12 0.5 0.01</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- Detection Camera Overlooking Intersection -->
+    <model name="intersection_camera">
+      <static>true</static>
+      <pose>0 0 15 0 1.5707 0</pose> <!-- High up looking down -->
+      <link name="link">
+        <sensor name="camera" type="camera">
+          <camera>
+            <horizontal_fov>1.047</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+          <always_on>1</always_on>
+          <update_rate>10</update_rate>
+          <visualize>true</visualize>
+          <topic>camera</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- High-Fidelity Local Traffic Lights (Positioned to face incoming lanes) -->
+    <!-- Facing North (Southbound entry) -->
+    <include>
+      <uri>model://detailed_traffic_light</uri>
+      <name>tl_north</name>
+      <pose>8 15 0 0 0 3.1415</pose> 
+    </include>
+    
+    <!-- Facing South (Northbound entry) -->
+    <include>
+      <uri>model://detailed_traffic_light</uri>
+      <name>tl_south</name>
+      <pose>-8 -15 0 0 0 0</pose>
+    </include>
+
+    <!-- Facing East (Westbound entry) -->
+    <include>
+      <uri>model://detailed_traffic_light</uri>
+      <name>tl_east</name>
+      <pose>15 -8 0 0 0 1.5707</pose>
+    </include>
+
+    <!-- Facing West (Eastbound entry) -->
+    <include>
+      <uri>model://detailed_traffic_light</uri>
+      <name>tl_west</name>
+      <pose>-15 8 0 0 0 -1.5707</pose>
+    </include>
+
+    <!-- Realistic Vehicles: 4 Roads, 2 Lanes per Road, 4 Cars per Road = 16 Cars -->
+    
+    <!-- SOUTHBOUND (Coming from North, x=-2 and x=-5) -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>prius_s1</name>
+      <pose>-2 30 0.01 0 0 0</pose>
+      </plugin>
+    </actor>
+    
+    <actor name="pedestrian_north_5">
+      <pose>1 7 1.0 0 0 1.5707</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+    
+    <actor name="pedestrian_north_6">
+      <pose>4 7 1.0 0 0 1.5707</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+
+    <!-- SOUTH CROSSWALK PEDESTRIANS (waiting at y=-14, will cross to y=-7) -->
+    <!-- 3 pedestrians on south side of crosswalk -->
+        <actor name="pedestrian_south_1">
+      <pose>-3 -14 0 0 0 1.5707</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_south_2">
+      <pose>0 -14 0 0 0 1.5707</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_south_3">
+      <pose>3 -14 0 0 0 1.5707</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+    <!-- 3 pedestrians on north side of south crosswalk -->
+        <actor name="pedestrian_south_4">
+      <pose>-2 -7 0 0 0 -1.5707</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_south_5">
+      <pose>1 -7 0 0 0 -1.5707</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_south_6">
+      <pose>4 -7 0 0 0 -1.5707</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+
+    <!-- EAST CROSSWALK PEDESTRIANS (waiting at x=14, will cross to x=7) -->
+    <!-- 3 pedestrians on east side of crosswalk -->
+        <actor name="pedestrian_east_1">
+      <pose>14 -3 0 0 0 3.1415</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_east_2">
+      <pose>14 0 0 0 0 3.1415</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_east_3">
+      <pose>14 3 0 0 0 3.1415</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+    <!-- 3 pedestrians on west side of east crosswalk -->
+        <actor name="pedestrian_east_4">
+      <pose>7 -2 0 0 0 0</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_east_5">
+      <pose>7 1 0 0 0 0</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_east_6">
+      <pose>7 4 0 0 0 0</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+
+    <!-- WEST CROSSWALK PEDESTRIANS (waiting at x=-14, will cross to x=-7) -->
+    <!-- 3 pedestrians on west side of crosswalk -->
+        <actor name="pedestrian_west_1">
+      <pose>-14 -3 0 0 0 0</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_west_2">
+      <pose>-14 0 0 0 0 0</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_west_3">
+      <pose>-14 3 0 0 0 0</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+    <!-- 3 pedestrians on east side of west crosswalk -->
+        <actor name="pedestrian_west_4">
+      <pose>-7 -2 0 0 0 3.1415</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_west_5">
+      <pose>-7 1 0 0 0 3.1415</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+        <actor name="pedestrian_west_6">
+      <pose>-7 4 0 0 0 3.1415</pose>
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walk">
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      </plugin>
+    </actor>
+    
+    <!-- PEDESTRIAN WAITING AREA SENSORS -->
+    <!-- Logical cameras to detect pedestrians waiting at crosswalks -->
+    <!-- Each sensor covers both sides of a crosswalk waiting area -->
+    
+    <!-- North crosswalk pedestrian sensor (covers y=7 to y=14, x=-6 to x=6) -->
+    <model name="sensor_pedestrian_north">
+      <static>true</static>
+      <pose>0 10.5 8 0 1.5707 0</pose> <!-- Above north crosswalk, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>12</far>
+            <horizontal_fov>1.2</horizontal_fov>
+            <aspect_ratio>1.5</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/pedestrian_north</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- South crosswalk pedestrian sensor (covers y=-14 to y=-7, x=-6 to x=6) -->
+    <model name="sensor_pedestrian_south">
+      <static>true</static>
+      <pose>0 -10.5 8 0 1.5707 0</pose> <!-- Above south crosswalk, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>12</far>
+            <horizontal_fov>1.2</horizontal_fov>
+            <aspect_ratio>1.5</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/pedestrian_south</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- East crosswalk pedestrian sensor (covers x=7 to x=14, y=-6 to y=6) -->
+    <model name="sensor_pedestrian_east">
+      <static>true</static>
+      <pose>10.5 0 8 0 1.5707 0</pose> <!-- Above east crosswalk, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>12</far>
+            <horizontal_fov>1.2</horizontal_fov>
+            <aspect_ratio>1.5</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/pedestrian_east</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- West crosswalk pedestrian sensor (covers x=-14 to x=-7, y=-6 to y=6) -->
+    <model name="sensor_pedestrian_west">
+      <static>true</static>
+      <pose>-10.5 0 8 0 1.5707 0</pose> <!-- Above west crosswalk, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>12</far>
+            <horizontal_fov>1.2</horizontal_fov>
+            <aspect_ratio>1.5</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/pedestrian_west</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- LANE DETECTION SENSORS (Logical Cameras) -->
+    <model name="sensor_north_road">
+      <static>true</static>
+      <pose>0 20 10 0 1.5707 0</pose> <!-- North road, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near><far>15</far>
+            <horizontal_fov>1.5</horizontal_fov>
+            <aspect_ratio>1</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="sensor_south_road">
+      <static>true</static>
+      <pose>0 -20 10 0 1.5707 0</pose> <!-- South road, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near><far>15</far>
+            <horizontal_fov>1.5</horizontal_fov>
+            <aspect_ratio>1</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="sensor_east_road">
+      <static>true</static>
+      <pose>20 0 10 0 1.5707 0</pose> <!-- East road, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near><far>15</far>
+            <horizontal_fov>1.5</horizontal_fov>
+            <aspect_ratio>1</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="sensor_west_road">
+      <static>true</static>
+      <pose>-20 0 10 0 1.5707 0</pose> <!-- West road, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near><far>15</far>
+            <horizontal_fov>1.5</horizontal_fov>
+            <aspect_ratio>1</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+        </sensor>
+      </link>
+    </model>
+
+    <!-- INTERSECTION ZONE SENSOR -->
+    <!-- Monitors vehicles in the intersection zone (-13 to +13 in X and Y) -->
+    <!-- Used to prevent phase changes when vehicles are crossing -->
+    <model name="sensor_intersection_zone">
+      <static>true</static>
+      <pose>0 0 20 0 1.5707 0</pose> <!-- Centered above intersection, looking down -->
+      <link name="link">
+        <sensor name="logical_camera" type="logical_camera">
+          <logical_camera>
+            <near>1</near>
+            <far>25</far> <!-- Covers the full intersection zone -->
+            <horizontal_fov>1.2</horizontal_fov> <!-- Wide enough to cover 26m x 26m zone -->
+            <aspect_ratio>1</aspect_ratio>
+          </logical_camera>
+          <visualize>true</visualize>
+          <update_rate>10</update_rate>
+          <topic>sensors/intersection_zone</topic>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="building_nw">
+      <static>true</static>
+      <pose>-30 30 10 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>20 20 20</size></box></geometry>
+          <material><ambient>0.6 0.5 0.4 1</ambient><diffuse>0.6 0.5 0.4 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="building_ne">
+      <static>true</static>
+      <pose>30 30 15 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>20 20 30</size></box></geometry>
+          <material><ambient>0.4 0.5 0.6 1</ambient><diffuse>0.4 0.5 0.6 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="building_sw">
+      <static>true</static>
+      <pose>-30 -30 12 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>20 20 24</size></box></geometry>
+          <material><ambient>0.5 0.6 0.5 1</ambient><diffuse>0.5 0.6 0.5 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="building_se">
+      <static>true</static>
+      <pose>30 -30 8 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>20 20 16</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

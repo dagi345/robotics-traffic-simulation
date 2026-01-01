@@ -1,0 +1,294 @@
+---
+- ros_topic_name: "/camera"
+  gz_topic_name: "/camera"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+- ros_topic_name: "/camera_info"
+  gz_topic_name: "/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# Generated Car Bridges
+- ros_topic_name: "/model/car_s1/cmd_vel"
+  gz_topic_name: "/model/car_s1/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s2/cmd_vel"
+  gz_topic_name: "/model/car_s2/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s3/cmd_vel"
+  gz_topic_name: "/model/car_s3/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s4/cmd_vel"
+  gz_topic_name: "/model/car_s4/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/model/car_n1/cmd_vel"
+  gz_topic_name: "/model/car_n1/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_n2/cmd_vel"
+  gz_topic_name: "/model/car_n2/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_n3/cmd_vel"
+  gz_topic_name: "/model/car_n3/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_n4/cmd_vel"
+  gz_topic_name: "/model/car_n4/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/model/car_e1/cmd_vel"
+  gz_topic_name: "/model/car_e1/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_e2/cmd_vel"
+  gz_topic_name: "/model/car_e2/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_e3/cmd_vel"
+  gz_topic_name: "/model/car_e3/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_e4/cmd_vel"
+  gz_topic_name: "/model/car_e4/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/model/car_w1/cmd_vel"
+  gz_topic_name: "/model/car_w1/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w2/cmd_vel"
+  gz_topic_name: "/model/car_w2/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w3/cmd_vel"
+  gz_topic_name: "/model/car_w3/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w4/cmd_vel"
+  gz_topic_name: "/model/car_w4/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+# Lane Sensors (Logical Cameras)
+- ros_topic_name: "/sensors/north"
+  gz_topic_name: "/model/sensor_north_road/sensor/logical_camera/logical_camera"
+  ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
+  gz_type_name: "gz.msgs.LogicalCameraImage"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/sensors/south"
+  gz_topic_name: "/model/sensor_south_road/sensor/logical_camera/logical_camera"
+  ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
+  gz_type_name: "gz.msgs.LogicalCameraImage"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/sensors/east"
+  gz_topic_name: "/model/sensor_east_road/sensor/logical_camera/logical_camera"
+  ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
+  gz_type_name: "gz.msgs.LogicalCameraImage"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/sensors/west"
+  gz_topic_name: "/model/sensor_west_road/sensor/logical_camera/logical_camera"
+  ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
+  gz_type_name: "gz.msgs.LogicalCameraImage"
+  direction: GZ_TO_ROS
+
+# Traffic Light Control
+- ros_topic_name: "/traffic_lights/commands"
+  gz_topic_name: "/world/intersection_world/light_config"
+  ros_type_name: "ros_gz_interfaces/msg/Light"
+  gz_type_name: "gz.msgs.Light"
+  direction: ROS_TO_GZ
+
+# Intersection Zone Sensor
+- ros_topic_name: "/sensors/intersection_zone"
+  gz_topic_name: "/model/sensor_intersection_zone/sensor/logical_camera/logical_camera"
+  ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
+  gz_type_name: "gz.msgs.LogicalCameraImage"
+  direction: GZ_TO_ROS
+
+# Pedestrian Actor Velocity Commands
+# North crosswalk pedestrians
+- ros_topic_name: "/model/pedestrian_north_1/cmd_vel"
+  gz_topic_name: "/model/pedestrian_north_1/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_north_2/cmd_vel"
+  gz_topic_name: "/model/pedestrian_north_2/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_north_3/cmd_vel"
+  gz_topic_name: "/model/pedestrian_north_3/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_north_4/cmd_vel"
+  gz_topic_name: "/model/pedestrian_north_4/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_north_5/cmd_vel"
+  gz_topic_name: "/model/pedestrian_north_5/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_north_6/cmd_vel"
+  gz_topic_name: "/model/pedestrian_north_6/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+# South crosswalk pedestrians
+- ros_topic_name: "/model/pedestrian_south_1/cmd_vel"
+  gz_topic_name: "/model/pedestrian_south_1/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_south_2/cmd_vel"
+  gz_topic_name: "/model/pedestrian_south_2/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_south_3/cmd_vel"
+  gz_topic_name: "/model/pedestrian_south_3/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_south_4/cmd_vel"
+  gz_topic_name: "/model/pedestrian_south_4/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_south_5/cmd_vel"
+  gz_topic_name: "/model/pedestrian_south_5/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_south_6/cmd_vel"
+  gz_topic_name: "/model/pedestrian_south_6/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+# East crosswalk pedestrians
+- ros_topic_name: "/model/pedestrian_east_1/cmd_vel"
+  gz_topic_name: "/model/pedestrian_east_1/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_east_2/cmd_vel"
+  gz_topic_name: "/model/pedestrian_east_2/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_east_3/cmd_vel"
+  gz_topic_name: "/model/pedestrian_east_3/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_east_4/cmd_vel"
+  gz_topic_name: "/model/pedestrian_east_4/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_east_5/cmd_vel"
+  gz_topic_name: "/model/pedestrian_east_5/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_east_6/cmd_vel"
+  gz_topic_name: "/model/pedestrian_east_6/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+# West crosswalk pedestrians
+- ros_topic_name: "/model/pedestrian_west_1/cmd_vel"
+  gz_topic_name: "/model/pedestrian_west_1/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_west_2/cmd_vel"
+  gz_topic_name: "/model/pedestrian_west_2/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_west_3/cmd_vel"
+  gz_topic_name: "/model/pedestrian_west_3/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_west_4/cmd_vel"
+  gz_topic_name: "/model/pedestrian_west_4/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_west_5/cmd_vel"
+  gz_topic_name: "/model/pedestrian_west_5/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/pedestrian_west_6/cmd_vel"
+  gz_topic_name: "/model/pedestrian_west_6/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+# Pedestrian Waiting Area Sensors (Logical Cameras)
+- ros_topic_name: "/sensors/pedestrian_north"
+  gz_topic_name: "/model/sensor_pedestrian_north/sensor/logical_camera/logical_camera"
+  ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
+  gz_type_name: "gz.msgs.LogicalCameraImage"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/sensors/pedestrian_south"
+  gz_topic_name: "/model/sensor_pedestrian_south/sensor/logical_camera/logical_camera"
+  ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
+  gz_type_name: "gz.msgs.LogicalCameraImage"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/sensors/pedestrian_east"
+  gz_topic_name: "/model/sensor_pedestrian_east/sensor/logical_camera/logical_camera"
+  ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
+  gz_type_name: "gz.msgs.LogicalCameraImage"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/sensors/pedestrian_west"
+  gz_topic_name: "/model/sensor_pedestrian_west/sensor/logical_camera/logical_camera"
+  ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
+  gz_type_name: "gz.msgs.LogicalCameraImage"
+  direction: GZ_TO_ROS

@@ -1,0 +1,347 @@
+<!-- ========================================== -->
+<!-- REALISTIC PEDESTRIAN CROWDS AT CROSSWALKS -->
+<!-- ========================================== -->
+<!-- Total: 20 pedestrians (5 per crosswalk) -->
+<!-- Positioned on curb, facing crosswalk -->
+<!-- No overlapping, realistic crowd formation -->
+<!-- ========================================== -->
+
+    <include>
+      <name>pedestrian_north_1</name>
+      <pose>-0.500 13.500 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_1/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_1/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_north_2</name>
+      <pose>0.500 13.500 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_2/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_2/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_north_3</name>
+      <pose>-0.500 14.100 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_3/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_3/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_north_4</name>
+      <pose>0.500 14.100 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_4/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_4/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_north_5</name>
+      <pose>0.000 14.700 0.000 0 0 -1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_north_5/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_north_5/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_1</name>
+      <pose>-0.500 -13.500 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_1/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_1/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_2</name>
+      <pose>0.500 -13.500 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_2/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_2/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_3</name>
+      <pose>-0.500 -14.100 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_3/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_3/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_4</name>
+      <pose>0.500 -14.100 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_4/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_4/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_south_5</name>
+      <pose>0.000 -14.700 0.000 0 0 1.570800</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_south_5/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_south_5/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_1</name>
+      <pose>13.500 -0.500 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_1/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_1/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_2</name>
+      <pose>13.500 0.500 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_2/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_2/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_3</name>
+      <pose>14.100 -0.500 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_3/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_3/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_4</name>
+      <pose>14.100 0.500 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_4/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_4/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_east_5</name>
+      <pose>14.700 0.000 0.000 0 0 3.141590</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_east_5/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_east_5/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_1</name>
+      <pose>-13.500 -0.500 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_1/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_1/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_2</name>
+      <pose>-13.500 0.500 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_2/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_2/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_3</name>
+      <pose>-14.100 -0.500 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_3/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_3/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_4</name>
+      <pose>-14.100 0.500 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_4/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_4/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
+
+    <include>
+      <name>pedestrian_west_5</name>
+      <pose>-14.700 0.000 0.000 0 0 0.000000</pose>
+      <uri>model://DoctorFemaleWalk</uri>
+      <plugin filename="libgazebo_ros_actor_plugin.so" name="gazebo_ros_actor_plugin::GazeboRosActorCommand">
+      <follow_mode>path</follow_mode>
+      <vel_topic>/pedestrian_west_5/cmd_vel</vel_topic>
+      <path_topic>/pedestrian_west_5/cmd_path</path_topic>
+      <animation_factor>4.0</animation_factor>
+      <linear_tolerance>0.1</linear_tolerance>
+      <linear_velocity>1.2</linear_velocity>
+      <angular_tolerance>0.0872</angular_tolerance>
+      <angular_velocity>2.5</angular_velocity>
+      <default_rotation>1.57</default_rotation>
+      </plugin>
+      </include>
