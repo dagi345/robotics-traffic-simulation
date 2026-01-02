@@ -24,10 +24,10 @@
       <static>true</static>
       <link name="link">
         <collision name="collision">
-          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <geometry><plane><normal>0 0 1</normal><size>400 400</size></plane></geometry>
         </collision>
         <visual name="visual">
-          <geometry><plane><normal>0 0 1</normal><size>100 100</size></plane></geometry>
+          <geometry><plane><normal>0 0 1</normal><size>400 400</size></plane></geometry>
           <material>
             <ambient>0.8 0.8 0.8 1</ambient>
             <diffuse>0.8 0.8 0.8 1</diffuse>
@@ -43,13 +43,13 @@
       <pose>0 0 0.01 0 0 0</pose>
       <link name="link">
         <visual name="road_ns">
-          <geometry><box><size>12 100 0.01</size></box></geometry>
-          <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.2 0.2 0.2 1</diffuse></material>
+          <geometry><box><size>12 400 0.01</size></box></geometry>
+          <material><ambient>0.35 0.35 0.35 1</ambient><diffuse>0.35 0.35 0.35 1</diffuse></material>
         </visual>
         <visual name="road_ew">
           <pose>0 0 0 0 0 1.5707</pose>
-          <geometry><box><size>12 100 0.01</size></box></geometry>
-          <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.2 0.2 0.2 1</diffuse></material>
+          <geometry><box><size>12 400 0.01</size></box></geometry>
+          <material><ambient>0.35 0.35 0.35 1</ambient><diffuse>0.35 0.35 0.35 1</diffuse></material>
         </visual>
         <!-- Center marking -->
         <visual name="center_marking">
@@ -143,49 +143,11 @@
     <!-- Using Prius Hybrid model from Gazebo Fuel with velocity control plugin -->
     <!-- All cars rotated 180 degrees for proper alignment -->
     
-    <!-- SOUTHBOUND (Coming from North, heading south - opposite of northbound) -->
-    <include>
-      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
-      <name>car_s1</name>
-      <pose>-2 30 0.01 0 0 0</pose>
-      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
-        <initial_linear>0 0 0</initial_linear>
-        <initial_angular>0 0 0</initial_angular>
-      </plugin>
-    </include>
-    <include>
-      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
-      <name>car_s2</name>
-      <pose>-2 25 0.01 0 0 0</pose>
-      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
-        <initial_linear>0 0 0</initial_linear>
-        <initial_angular>0 0 0</initial_angular>
-      </plugin>
-    </include>
-    <include>
-      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
-      <name>car_s3</name>
-      <pose>-5 35 0.01 0 0 0</pose>
-      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
-        <initial_linear>0 0 0</initial_linear>
-        <initial_angular>0 0 0</initial_angular>
-      </plugin>
-    </include>
-    <include>
-      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
-      <name>car_s4</name>
-      <pose>-5 30 0.01 0 0 0</pose>
-      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
-        <initial_linear>0 0 0</initial_linear>
-        <initial_angular>0 0 0</initial_angular>
-      </plugin>
-    </include>
-
-    <!-- NORTHBOUND (Coming from South, heading north) -->
+    <!-- N VEHICLES -->
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
       <name>car_n1</name>
-      <pose>2 -30 0.01 0 0 3.1415</pose>
+      <pose>2.0 -25.88503018839253 0.01 0 0 3.1415</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
@@ -194,7 +156,7 @@
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
       <name>car_n2</name>
-      <pose>2 -25 0.01 0 0 3.1415</pose>
+      <pose>5.0 -28.094406476706368 0.01 0 0 3.1415</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
@@ -203,7 +165,7 @@
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
       <name>car_n3</name>
-      <pose>5 -35 0.01 0 0 3.1415</pose>
+      <pose>2.0 -44.69179417766442 0.01 0 0 3.1415</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
@@ -212,18 +174,7 @@
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
       <name>car_n4</name>
-      <pose>5 -30 0.01 0 0 3.1415</pose>
-      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
-        <initial_linear>0 0 0</initial_linear>
-        <initial_angular>0 0 0</initial_angular>
-      </plugin>
-    </include>
-
-    <!-- WESTBOUND (Coming from East, heading west) -->
-    <include>
-      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
-      <name>car_w1</name>
-      <pose>30 2 0.01 0 0 -1.5707</pose>
+      <pose>5.0 -42.18658797455694 0.01 0 0 3.1415</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
@@ -231,8 +182,8 @@
     </include>
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
-      <name>car_w2</name>
-      <pose>25 2 0.01 0 0 -1.5707</pose>
+      <name>car_n5</name>
+      <pose>2.0 -52.954150988772014 0.01 0 0 3.1415</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
@@ -240,8 +191,8 @@
     </include>
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
-      <name>car_w3</name>
-      <pose>35 5 0.01 0 0 -1.5707</pose>
+      <name>car_n6</name>
+      <pose>5.0 -63.21766677058348 0.01 0 0 3.1415</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
@@ -249,19 +200,154 @@
     </include>
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
-      <name>car_w4</name>
-      <pose>30 5 0.01 0 0 -1.5707</pose>
+      <name>car_n7</name>
+      <pose>2.0 -67.51093164828234 0.01 0 0 3.1415</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
       </plugin>
     </include>
-
-    <!-- EASTBOUND (Coming from West, heading east) -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_n8</name>
+      <pose>5.0 -85.93960378229183 0.01 0 0 3.1415</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_n9</name>
+      <pose>2.0 -76.02788070840339 0.01 0 0 3.1415</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_n10</name>
+      <pose>5.0 -110.63014375320793 0.01 0 0 3.1415</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <!-- S VEHICLES -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s1</name>
+      <pose>-2.0 27.74783076062034 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s2</name>
+      <pose>-5.0 25.931478679983293 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s3</name>
+      <pose>-2.0 35.79029333224783 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s4</name>
+      <pose>-5.0 40.96810412984884 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s5</name>
+      <pose>-2.0 47.13757054067733 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s6</name>
+      <pose>-5.0 57.075342181762686 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s7</name>
+      <pose>-2.0 68.50776040485154 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s8</name>
+      <pose>-5.0 71.72375299447889 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s9</name>
+      <pose>-2.0 89.62648486853462 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s10</name>
+      <pose>-5.0 89.98264800848811 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s11</name>
+      <pose>-2.0 101.56090950744938 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_s12</name>
+      <pose>-5.0 105.92827443398178 0.01 0 0 0</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <!-- E VEHICLES -->
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
       <name>car_e1</name>
-      <pose>-30 -2 0.01 0 0 1.5707</pose>
+      <pose>-27.580546456687216 -2.0 0.01 0 0 1.5707</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
@@ -270,7 +356,7 @@
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
       <name>car_e2</name>
-      <pose>-25 -2 0.01 0 0 1.5707</pose>
+      <pose>-26.70454727781585 -5.0 0.01 0 0 1.5707</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
@@ -279,7 +365,7 @@
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
       <name>car_e3</name>
-      <pose>-30 -5 0.01 0 0 1.5707</pose>
+      <pose>-46.92575979435276 -2.0 0.01 0 0 1.5707</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
@@ -288,12 +374,168 @@
     <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
       <name>car_e4</name>
-      <pose>-25 -5 0.01 0 0 1.5707</pose>
+      <pose>-37.438566105660584 -5.0 0.01 0 0 1.5707</pose>
       <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
         <initial_linear>0 0 0</initial_linear>
         <initial_angular>0 0 0</initial_angular>
       </plugin>
     </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_e5</name>
+      <pose>-70.31317274651005 -2.0 0.01 0 0 1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_e6</name>
+      <pose>-61.383726213469835 -5.0 0.01 0 0 1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_e7</name>
+      <pose>-84.52295258950136 -2.0 0.01 0 0 1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_e8</name>
+      <pose>-81.8084577036499 -5.0 0.01 0 0 1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <!-- W VEHICLES -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w1</name>
+      <pose>27.537904654406002 2.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w2</name>
+      <pose>28.213566238509486 5.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w3</name>
+      <pose>50.44889675874366 2.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w4</name>
+      <pose>40.01719241139973 5.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w5</name>
+      <pose>65.80242167764649 2.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w6</name>
+      <pose>58.52482659013681 5.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w7</name>
+      <pose>88.63075606248259 2.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w8</name>
+      <pose>79.48695988287582 5.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w9</name>
+      <pose>98.1045323548951 2.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w10</name>
+      <pose>91.22731478149629 5.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w11</name>
+      <pose>114.32912811657235 2.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w12</name>
+      <pose>112.50253873935551 5.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_w13</name>
+      <pose>123.42208769424028 2.0 0.01 0 0 -1.5707</pose>
+      <plugin filename="gz-sim-velocity-control-system" name="gz::sim::systems::VelocityControl">
+        <initial_linear>0 0 0</initial_linear>
+        <initial_angular>0 0 0</initial_angular>
+      </plugin>
+    </include>
+
+
 
     <!-- Logical cameras to detect pedestrians waiting at crosswalks -->
     <!-- Each sensor covers both sides of a crosswalk waiting area -->

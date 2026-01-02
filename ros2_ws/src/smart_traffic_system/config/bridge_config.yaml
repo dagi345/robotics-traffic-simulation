@@ -36,7 +36,46 @@
   ros_type_name: "geometry_msgs/msg/Twist"
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
-
+- ros_topic_name: "/model/car_s5/cmd_vel"
+  gz_topic_name: "/model/car_s5/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s6/cmd_vel"
+  gz_topic_name: "/model/car_s6/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s7/cmd_vel"
+  gz_topic_name: "/model/car_s7/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s8/cmd_vel"
+  gz_topic_name: "/model/car_s8/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s9/cmd_vel"
+  gz_topic_name: "/model/car_s9/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s10/cmd_vel"
+  gz_topic_name: "/model/car_s10/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s11/cmd_vel"
+  gz_topic_name: "/model/car_s11/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_s12/cmd_vel"
+  gz_topic_name: "/model/car_s12/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
 - ros_topic_name: "/model/car_n1/cmd_vel"
   gz_topic_name: "/model/car_n1/cmd_vel"
   ros_type_name: "geometry_msgs/msg/Twist"
@@ -57,7 +96,36 @@
   ros_type_name: "geometry_msgs/msg/Twist"
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
-
+- ros_topic_name: "/model/car_n5/cmd_vel"
+  gz_topic_name: "/model/car_n5/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_n6/cmd_vel"
+  gz_topic_name: "/model/car_n6/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_n7/cmd_vel"
+  gz_topic_name: "/model/car_n7/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_n8/cmd_vel"
+  gz_topic_name: "/model/car_n8/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_n9/cmd_vel"
+  gz_topic_name: "/model/car_n9/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_n10/cmd_vel"
+  gz_topic_name: "/model/car_n10/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
 - ros_topic_name: "/model/car_e1/cmd_vel"
   gz_topic_name: "/model/car_e1/cmd_vel"
   ros_type_name: "geometry_msgs/msg/Twist"
@@ -78,7 +146,26 @@
   ros_type_name: "geometry_msgs/msg/Twist"
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
-
+- ros_topic_name: "/model/car_e5/cmd_vel"
+  gz_topic_name: "/model/car_e5/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_e6/cmd_vel"
+  gz_topic_name: "/model/car_e6/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_e7/cmd_vel"
+  gz_topic_name: "/model/car_e7/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_e8/cmd_vel"
+  gz_topic_name: "/model/car_e8/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
 - ros_topic_name: "/model/car_w1/cmd_vel"
   gz_topic_name: "/model/car_w1/cmd_vel"
   ros_type_name: "geometry_msgs/msg/Twist"
@@ -96,6 +183,51 @@
   direction: ROS_TO_GZ
 - ros_topic_name: "/model/car_w4/cmd_vel"
   gz_topic_name: "/model/car_w4/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w5/cmd_vel"
+  gz_topic_name: "/model/car_w5/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w6/cmd_vel"
+  gz_topic_name: "/model/car_w6/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w7/cmd_vel"
+  gz_topic_name: "/model/car_w7/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w8/cmd_vel"
+  gz_topic_name: "/model/car_w8/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w9/cmd_vel"
+  gz_topic_name: "/model/car_w9/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w10/cmd_vel"
+  gz_topic_name: "/model/car_w10/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w11/cmd_vel"
+  gz_topic_name: "/model/car_w11/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w12/cmd_vel"
+  gz_topic_name: "/model/car_w12/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+- ros_topic_name: "/model/car_w13/cmd_vel"
+  gz_topic_name: "/model/car_w13/cmd_vel"
   ros_type_name: "geometry_msgs/msg/Twist"
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
@@ -292,3 +424,4 @@
   ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
   gz_type_name: "gz.msgs.LogicalCameraImage"
   direction: GZ_TO_ROS
+

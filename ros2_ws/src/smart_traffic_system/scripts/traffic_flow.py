@@ -14,6 +14,19 @@ from std_msgs.msg import String, Bool
 from ros_gz_interfaces.msg import LogicalCameraImage
 import random
 import json
+import time
+import math
+import time
+
+class DriverProfile:
+    """unique characteristics for each driver/car."""
+    def __init__(self, desired_speed, aggressiveness, time_gap):
+        self.desired_speed = desired_speed
+        self.aggressiveness = aggressiveness  # affects speed fluctuation
+        self.time_gap = time_gap  # seconds
+        self.current_speed_target = desired_speed
+        self.last_update_time = time.time()
+
 
 
 class MultiTrafficFlowControl(Node):
@@ -37,8 +50,18 @@ class MultiTrafficFlowControl(Node):
         self.INTERSECTION_SLOWDOWN = 18.0  # Distance to start slowing if zone not clear
 
         self.car_publishers = {}
-        self.speeds = {}
+        # self.speeds = {}  # REPLACED by driver_profiles
+        self.driver_profiles = {}
         self.directions = ['n', 's', 'e', 'w']
+        
+        # Vehicle counts per direction (requested: 10, 12, 8, 13)
+        self.vehicle_counts = {
+            'n': 10,  # Northbound
+            's': 12,  # Southbound
+            'e': 8,   # Eastbound
+            'w': 13   # Westbound
+        }
+
         
         # State tracking
         self.light_state = "NS_GREEN"
@@ -86,12 +109,29 @@ class MultiTrafficFlowControl(Node):
         self.vehicle_positions = {}  # {vehicle_name: (x, y, z)}
         self.vehicle_lanes = self._initialize_lane_mapping()
 
+
         for d in self.directions:
-            for i in range(1, 5):
+            for i in range(1, self.vehicle_counts[d] + 1):
                 name = f'car_{d}{i}'
                 topic = f'/model/{name}/cmd_vel'
                 self.car_publishers[name] = self.create_publisher(Twist, topic, 10)
-                self.speeds[name] = random.uniform(self.min_s, self.max_s)
+                
+                # Assign unique driver profile
+                # Speed: Gaussian distribution with HIGH variance for realistic heterogeneity
+                # Aggressiveness: 0.1 to 0.8 (some very inconsistent drivers)
+                # Time gap: 1.0s to 4.0s (some tailgaters, some cautious)
+                base_speed = random.uniform(self.min_s, self.max_s)
+                
+                # Allow significant outliers (some "grandmas", some "speeders")
+                # Increase sigma to 5.0 for visible speed differences
+                variance = random.gauss(0, 5.0) 
+                desired_speed = max(20.0, base_speed + variance) # Cap min speed at 20 so they don't stop
+                
+                self.driver_profiles[name] = DriverProfile(
+                    desired_speed=desired_speed,
+                    aggressiveness=random.uniform(0.1, 0.6), # More fluctuation
+                    time_gap=random.uniform(1.2, 4.0)        # Wider gap variation
+                )
 
         # Subscriptions for traffic light state
         self.create_subscription(
@@ -178,81 +218,33 @@ class MultiTrafficFlowControl(Node):
         vehicle_lanes = {}
         
         # North lane: vehicles moving south (decreasing y)
-        for i in range(1, 5):
+        for i in range(1, self.vehicle_counts['n'] + 1):
             vehicle_lanes[f'car_n{i}'] = 'north'
         
         # South lane: vehicles moving north (increasing y)
-        for i in range(1, 5):
+        for i in range(1, self.vehicle_counts['s'] + 1):
             vehicle_lanes[f'car_s{i}'] = 'south'
         
         # East lane: vehicles moving west (decreasing x)
-        for i in range(1, 5):
+        for i in range(1, self.vehicle_counts['e'] + 1):
             vehicle_lanes[f'car_e{i}'] = 'east'
         
         # West lane: vehicles moving east (increasing x)
-        for i in range(1, 5):
+        for i in range(1, self.vehicle_counts['w'] + 1):
             vehicle_lanes[f'car_w{i}'] = 'west'
         
         return vehicle_lanes
     
-    def get_velocity_axis_and_sign(self, vehicle_name):
-        """
-        Determine correct velocity axis and sign based on vehicle direction.
-        
-        Based on working south cars (rotation=0, use negative linear.y):
-        - Southbound (car_s*): rotation=0 → negative linear.y (WORKING REFERENCE)
-        - Northbound (car_n*): rotation=3.1415 (180°) → positive linear.y
-        - Westbound (car_w*): rotation=-1.5707 (-90°) → negative linear.x
-        - Eastbound (car_e*): rotation=1.5707 (90°) → positive linear.x
-        
-        Args:
-            vehicle_name: Name like 'car_n1', 'car_s2', 'car_e3', 'car_w4'
-        
-        Returns:
-            tuple: (axis, sign) where axis is 'x' or 'y' and sign is 1 or -1
-        """
-        try:
-            direction = vehicle_name.split('_')[1][0]
-        except (IndexError, AttributeError):
-            self.get_logger().error(f"Invalid vehicle name format: {vehicle_name}")
-            return ('y', 0)
-        
-        if direction == 's':
-            return ('y', -1)  # Southbound: negative Y (WORKING REFERENCE)
-        elif direction == 'n':
-            return ('y', 1)   # Northbound: positive Y (opposite of south)
-        elif direction == 'w':
-            return ('x', -1)  # Westbound: negative X
-        elif direction == 'e':
-            return ('x', 1)   # Eastbound: positive X
-        else:
-            self.get_logger().error(f"Unknown direction '{direction}' for {vehicle_name}")
-            return ('y', 0)
-    
     def apply_velocity(self, vehicle_name, velocity):
         """
-        Apply velocity to vehicle using correct axis and sign.
+        Apply velocity to vehicle using standard command.
         
-        This method replaces the old approach of always using linear.y.
-        It correctly maps velocity commands based on vehicle direction:
-        - North/South vehicles use linear.y
-        - East/West vehicles use linear.x
-        
-        Args:
-            vehicle_name: Name of the vehicle
-            velocity: Desired velocity magnitude (always positive)
+        CRITICAL: Per CORRECT_VEHICLE_DIRECTIONS.md, all vehicles use 
+        negative linear.y to move forward relative to their own frame.
+        Direction is handled by the world pose rotation.
         """
-        axis, sign = self.get_velocity_axis_and_sign(vehicle_name)
-        
         msg = Twist()
-        if axis == 'x':
-            msg.linear.x = sign * velocity
-            msg.linear.y = 0.0
-        else:  # axis == 'y'
-            msg.linear.x = 0.0
-            msg.linear.y = sign * velocity
-        
-        # Publish velocity command
+        msg.linear.y = -velocity
         if vehicle_name in self.car_publishers:
             self.car_publishers[vehicle_name].publish(msg)
         else:
@@ -756,22 +748,34 @@ class MultiTrafficFlowControl(Node):
             zone_conflict = self._should_stop_for_zone_conflict(name)
             
             # Determine velocity based on all conditions
+            profile = self.driver_profiles[name]
+            
+            # 0. Update desired speed with small random fluctuations (Simulate human foot irregularity)
+            if time.time() - profile.last_update_time > 1.0:
+                # Fluctuate by +/- 5% proportional to aggressiveness
+                fluctuation = profile.desired_speed * profile.aggressiveness * random.uniform(-0.1, 0.1)
+                profile.current_speed_target = max(1.0, profile.desired_speed + fluctuation)
+                profile.last_update_time = time.time()
+                
+            target_velocity = profile.current_speed_target
             reason = ""
-            velocity = self.speeds[name]
             
             # PRIORITY 1: Traffic Light (MUST OBEY - HIGHEST PRIORITY)
             # CRITICAL SAFETY: Stop vehicles when their controlling light is RED/YELLOW
             light_state = self._get_controlling_light(name)
             in_intersection = self._is_in_intersection(name)
             
+            # Calculate distance to stop line for smooth slowing
+            # We don't have exact distance to stop line in this logic yet, 
+            # effectively traffic light stop is treated as an obstacle at the stop line
+            
+            should_stop_for_light = False
+            
             # AGGRESSIVE SAFETY: If light is RED, stop immediately (unless already in intersection)
             if light_state == 'RED':
                 if not in_intersection:
-                    velocity = 0.0
-                    reason = "RED_LIGHT_STOP"
-                    # Log only occasionally to avoid spam
-                    if name not in self.previous_velocities or self.previous_velocities[name] > 0:
-                        self.get_logger().info(f"{name}: STOPPING - RED light")
+                     should_stop_for_light = True
+                     reason = "RED_LIGHT_STOP"
             
             # YELLOW: Stop if approaching intersection
             elif light_state == 'YELLOW':
@@ -779,59 +783,54 @@ class MultiTrafficFlowControl(Node):
                 near_intersection = self._is_near_intersection_simple(name)
                 
                 if (must_stop_for_light or in_zone or near_intersection) and not in_intersection:
-                    velocity = 0.0
+                    should_stop_for_light = True
                     reason = "YELLOW_LIGHT_STOP"
             
-            # GREEN: Use normal stop line detection (should not stop unless at stop line for other reasons)
+            # GREEN: Don't stop for light
             elif must_stop_for_light:
-                velocity = 0.0
-                reason = f"traffic_light_{light_state}"
-            
-            # PRIORITY 2: Emergency stop (too close to vehicle ahead)
-            elif distance_ahead < self.STOP_DISTANCE:
-                velocity = 0.0
-                reason = f"emergency_stop (dist={distance_ahead:.1f}m)"
-            
+                 should_stop_for_light = True
+                 reason = f"traffic_light_{light_state}"
+
+            if should_stop_for_light:
+                # If we need to stop for light, we can treat it as '0' speed target
+                # But to prevent instant stops, we should ideally decelerate
+                # For now, we'll keep the strict stop if very close/in zone, 
+                # but could smooth it if we knew distance to stop line.
+                # Given strict requirements, we'll forceful stop.
+                target_velocity = 0.0
+
+            # PRIORITY 2: Car Following / Collision Avoidance (ACC)
+            # Adjust speed based on vehicle ahead
+            if distance_ahead != float('inf'):
+                # Intelligent collision avoidance logic
+                # Desired gap = stop_distance + (current_speed * time_gap)
+                # But here we calculate a safe speed based on available distance
+                
+                # Effective distance available to drive into
+                available_space = max(0.0, distance_ahead - self.STOP_DISTANCE)
+                
+                # Rule: allow 1 time_gap of speed. 
+                # e.g. if 10m available and gap is 2s, safe speed is 5m/s.
+                safe_following_speed = available_space / profile.time_gap
+                
+                if safe_following_speed < target_velocity:
+                    target_velocity = safe_following_speed
+                    reason = f"ACC (dist={distance_ahead:.1f}m)"
+                    
             # PRIORITY 3: Zone conflict (prevent intersection collision)
-            elif zone_conflict:
-                velocity = 0.0
+            if zone_conflict:
+                target_velocity = 0.0
                 reason = "zone_conflict"
+                
+            # Final application
+            self.apply_velocity(name, target_velocity)
             
-            # PRIORITY 4: Approaching red light - slow down early
-            elif self._is_approaching_stop_line(name) and light_state == 'RED':
-                # Slow down when approaching red light (even if not at stop line yet)
-                velocity = self.speeds[name] * 0.3  # Slow down to 30% speed
-                reason = "approaching_red_light"
-            
-            # PRIORITY 5: Collision avoidance slowdown
-            elif distance_ahead < self.SAFE_FOLLOWING_DISTANCE:
-                ratio = (distance_ahead - self.STOP_DISTANCE) / \
-                       (self.SAFE_FOLLOWING_DISTANCE - self.STOP_DISTANCE)
-                velocity = self.speeds[name] * ratio
-                reason = f"collision_avoidance (dist={distance_ahead:.1f}m)"
-            
-            # PRIORITY 6: Approaching intersection with potential conflict
-            elif self._is_approaching_intersection(name):
-                # Slow down when approaching intersection if zone not fully clear
-                if not self.zone_is_clear:
-                    velocity = self.speeds[name] * 0.5
-                    reason = "approaching_busy_intersection"
-                else:
-                    reason = "normal"
-            else:
-                reason = "normal"
-            
-            # Log velocity changes
-            self._log_velocity_change(name, velocity, reason)
-            
-            # ✅ CORRECT VELOCITY CONTROL - DO NOT MODIFY
-            # All vehicles use negative linear.y for forward motion
-            # Vehicle rotation in world file determines actual direction
-            # This configuration is PROVEN to work for all 16 vehicles
-            # Reference: CORRECT_VEHICLE_DIRECTIONS.md
-            msg = Twist()
-            msg.linear.y = -velocity
-            pub.publish(msg)
+            if reason and random.random() < 0.01: # Log sparingly
+                 self.get_logger().info(f"{name}: Speed {target_velocity:.2f} ({reason})")
+
+            # Log velocity changes (optional, adapted for new logic)
+            if random.random() < 0.005:
+                 self.get_logger().info(f"{name}: Speed {target_velocity:.2f} ({reason})")
     
     def _log_velocity_change(self, vehicle_name, velocity, reason):
         """Log vehicle control decisions when velocity changes."""
