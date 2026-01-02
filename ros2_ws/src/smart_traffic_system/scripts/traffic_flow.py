@@ -687,6 +687,40 @@ class MultiTrafficFlowControl(Node):
         distance = self._get_distance_to_intersection(vehicle_name)
         return distance < self.INTERSECTION_SLOWDOWN and distance > self.INTERSECTION_ENTRY
     
+    def _is_past_stop_line(self, vehicle_name):
+        """
+        Check if vehicle has passed the entrance stop line.
+        If True, the vehicle is inside or exiting the intersection and should NOT stop.
+        """
+        # CRITICAL FIX: Use Intersection Zone Monitor data.
+        # If the sensor sees us in the box, we are definitely past the line.
+        # This handles the case where the approach sensors lose track of us (staleness).
+        if vehicle_name in self.vehicles_in_zone:
+            return True
+
+        pos = self._get_vehicle_position(vehicle_name)
+        if pos is None:
+            return False
+            
+        px, py, _ = pos
+        # Catch potential indexing errors if name is malformed
+        try:
+            direction = vehicle_name.split('_')[1][0]
+        except (IndexError, AttributeError):
+            return False
+            
+        # Check strict inequalities based on intersection geometry (Stop lines at +/- 13.0)
+        # Note: These values must match the world file geometry
+        if direction == 'n':   # Moving +Y, Stop at -13.0
+            return py > -13.0
+        elif direction == 's': # Moving -Y, Stop at 13.0
+            return py < 13.0
+        elif direction == 'e': # Moving +X, Stop at -13.0
+            return px > -13.0
+        elif direction == 'w': # Moving -X, Stop at 13.0
+            return px < 13.0
+        return False
+
     def _should_stop_for_zone_conflict(self, vehicle_name):
         """
         Check if vehicle should stop due to conflicting vehicles in zone.
@@ -696,6 +730,11 @@ class MultiTrafficFlowControl(Node):
         
         Requirements: 1.1, 1.2, 1.3
         """
+        # "Exit Freedom": If we are already past the stop line (inside), NEVER stop for zone conflict.
+        # We must clear the intersection.
+        if self._is_past_stop_line(vehicle_name):
+            return False
+
         car_road = vehicle_name.split('_')[1][0]
         distance = self._get_distance_to_intersection(vehicle_name)
         
@@ -762,41 +801,32 @@ class MultiTrafficFlowControl(Node):
             
             # PRIORITY 1: Traffic Light (MUST OBEY - HIGHEST PRIORITY)
             # CRITICAL SAFETY: Stop vehicles when their controlling light is RED/YELLOW
+            # "Exit Freedom": Only obey light if we are BEFORE the stop line.
             light_state = self._get_controlling_light(name)
-            in_intersection = self._is_in_intersection(name)
             
-            # Calculate distance to stop line for smooth slowing
-            # We don't have exact distance to stop line in this logic yet, 
-            # effectively traffic light stop is treated as an obstacle at the stop line
-            
+            # Check if we are past the stop line (Exit Freedom)
+            past_stop_line = self._is_past_stop_line(name)
+
             should_stop_for_light = False
             
-            # AGGRESSIVE SAFETY: If light is RED, stop immediately (unless already in intersection)
-            if light_state == 'RED':
-                if not in_intersection:
-                     should_stop_for_light = True
-                     reason = "RED_LIGHT_STOP"
-            
-            # YELLOW: Stop if approaching intersection
-            elif light_state == 'YELLOW':
-                in_zone = self._is_in_detection_zone(name)
-                near_intersection = self._is_near_intersection_simple(name)
-                
-                if (must_stop_for_light or in_zone or near_intersection) and not in_intersection:
+            # Only apply Red/Yellow logic if we haven't passed the line yet
+            if not past_stop_line:
+                # RED: Stop immediately if before line
+                if light_state == 'RED':
                     should_stop_for_light = True
-                    reason = "YELLOW_LIGHT_STOP"
-            
-            # GREEN: Don't stop for light
-            elif must_stop_for_light:
-                 should_stop_for_light = True
-                 reason = f"traffic_light_{light_state}"
+                    reason = "RED_LIGHT_STOP"
+                
+                # YELLOW: Stop if we can do so safely (checking if we are "near" or "at" the line)
+                elif light_state == 'YELLOW':
+                     # If we are effectively AT the line (in the braking zone), stop.
+                     if self._is_at_stop_line(name):
+                         should_stop_for_light = True
+                         reason = "YELLOW_LIGHT_STOP"
+            else:
+                # passed the line - ignore light
+                pass
 
             if should_stop_for_light:
-                # If we need to stop for light, we can treat it as '0' speed target
-                # But to prevent instant stops, we should ideally decelerate
-                # For now, we'll keep the strict stop if very close/in zone, 
-                # but could smooth it if we knew distance to stop line.
-                # Given strict requirements, we'll forceful stop.
                 target_velocity = 0.0
 
             # PRIORITY 2: Car Following / Collision Avoidance (ACC)
@@ -825,6 +855,13 @@ class MultiTrafficFlowControl(Node):
             # Final application
             self.apply_velocity(name, target_velocity)
             
+            # DEBUG: Catch intersection freeze
+            if target_velocity < 0.1 and self._is_past_stop_line(name):
+                pos = self._get_vehicle_position(name)
+                self.get_logger().warn(
+                    f"STUCK IN INTERSECTION: {name} at {pos} stopped. Reason: {reason}. "
+                    f"Light: {self._get_controlling_light(name)}")
+
             if reason and random.random() < 0.01: # Log sparingly
                  self.get_logger().info(f"{name}: Speed {target_velocity:.2f} ({reason})")
 

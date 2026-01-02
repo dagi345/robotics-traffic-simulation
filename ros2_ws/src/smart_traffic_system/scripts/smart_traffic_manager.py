@@ -358,8 +358,12 @@ class SmartTrafficManager(Node):
                     self.current_green_time = self.BASE_GREEN
                 else:
                     if self.vehicles_in_zone:
-                        self.get_logger().debug(
-                            f"Waiting for zone clearance: {self.vehicles_in_zone}")
+                         # Log exactly WHICH vehicle is holding up the light
+                        self.get_logger().info(
+                            f"[SAFETY HOLD] Waiting for vehicles to clear intersection: {self.vehicles_in_zone}. Target State: {self.target_state}")
+                    elif not self.zone_is_clear:
+                        self.get_logger().info(
+                            f"[SAFETY HOLD] Zone reported NOT CLEAR (Sensor active). Target State: {self.target_state}")
 
         if next_state != self.current_state:
             self.current_state = next_state

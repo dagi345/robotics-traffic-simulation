@@ -266,7 +266,7 @@
 
 # Intersection Zone Sensor
 - ros_topic_name: "/sensors/intersection_zone"
-  gz_topic_name: "/model/sensor_intersection_zone/sensor/logical_camera/logical_camera"
+  gz_topic_name: "sensors/intersection_zone"
   ros_type_name: "ros_gz_interfaces/msg/LogicalCameraImage"
   gz_type_name: "gz.msgs.LogicalCameraImage"
   direction: GZ_TO_ROS

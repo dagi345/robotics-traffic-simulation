@@ -119,7 +119,7 @@ class IntersectionZoneMonitor(Node):
                 # Track entry time for new vehicles
                 if vehicle_name not in self.vehicles_in_zone:
                     self.vehicles_in_zone[vehicle_name] = current_time
-                    self.get_logger().debug(f'Vehicle {vehicle_name} entered intersection zone')
+                    self.get_logger().info(f'Vehicle {vehicle_name} entered intersection zone')
                 else:
                     # Check for stuck vehicles
                     entry_time = self.vehicles_in_zone[vehicle_name]
@@ -139,7 +139,7 @@ class IntersectionZoneMonitor(Node):
             del self.vehicles_in_zone[vehicle_name]
             if vehicle_name in self.vehicle_directions:
                 del self.vehicle_directions[vehicle_name]
-            self.get_logger().debug(
+            self.get_logger().info(
                 f'Vehicle {vehicle_name} exited intersection zone '
                 f'(transit time: {transit_time:.1f}s)'
             )
